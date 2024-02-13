@@ -18,3 +18,7 @@
   border: 5px solid white;
   font-size: 50px;
 }
+.outlined:hover {
+  font-size: 55px;
+  transition-duration: 300ms;
+}

@@ -9,9 +9,14 @@ import Result from "../components/Result";
 import Emoji from "../components/Emoji";
 
 const Game = () => {
+  // useState
   const [compMove, setCompMove] = useState("");
   const [playerMove, setPlayerMove] = useState("");
   const [result, setResult] = useState("");
+  const [wins, setWins] = useState(0);
+  const [losses, setLosses] = useState(0);
+  const [ties, setTies] = useState(0);
+  // Array for picking random move
   const moves = ["rock", "paper", "scissors"];
   let computerMove;
 
@@ -27,34 +32,43 @@ const Game = () => {
     if (playerMove === "rock") {
       if (computerMove === "rock") {
         setResult("Tie");
+        setTies(ties + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "paper") {
         setResult("You Lose");
+        setLosses(losses + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "scissors") {
         setResult("You Win");
+        setWins(wins + 1);
         displayResult(playerMove, computerMove);
       }
     } else if (playerMove === "paper") {
       if (computerMove === "rock") {
         setResult("You Win");
+        setWins(wins + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "paper") {
         setResult("Tie");
+        setTies(ties + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "scissors") {
         setResult("You Lose");
+        setLosses(losses + 1);
         displayResult(playerMove, computerMove);
       }
     } else if (playerMove === "scissors") {
       if (computerMove === "rock") {
         setResult("You Lose");
+        setLosses(losses + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "paper") {
         setResult("You Win");
+        setWins(wins + 1);
         displayResult(playerMove, computerMove);
       } else if (computerMove === "scissors") {
         setResult("Tie");
+        setTies(ties + 1);
         displayResult(playerMove, computerMove);
       }
     }
@@ -65,55 +79,36 @@ const Game = () => {
     switch (playerMove) {
       case "rock":
         setPlayerMove("✊");
-        switch (computerMove) {
-          case "rock":
-            setCompMove("✊");
-            break;
-          case "paper":
-            setCompMove("🖐️");
-            break;
-          case "scissors":
-            setCompMove("✌️");
-            break;
-          default:
-            break;
-        }
         break;
       case "paper":
         setPlayerMove("🖐️");
-        switch (computerMove) {
-          case "rock":
-            setCompMove("✊");
-            break;
-          case "paper":
-            setCompMove("🖐️");
-            break;
-          case "scissors":
-            setCompMove("✌️");
-            break;
-          default:
-            break;
-        }
         break;
       case "scissors":
         setPlayerMove("✌️");
-        switch (computerMove) {
-          case "rock":
-            setCompMove("✊");
-            break;
-          case "paper":
-            setCompMove("🖐️");
-            break;
-          case "scissors":
-            setCompMove("✌️");
-            break;
-          default:
-            break;
-        }
         break;
       default:
         break;
     }
+    switch (computerMove) {
+      case "rock":
+        setCompMove("✊");
+        break;
+      case "paper":
+        setCompMove("🖐️");
+        break;
+      case "scissors":
+        setCompMove("✌️");
+        break;
+      default:
+        break;
+    }
+  }
+
+  //  Reset Score
+  function resetScore() {
+    setWins(0);
+    setLosses(0);
+    setTies(0);
   }
 
   return (
@@ -130,21 +125,27 @@ const Game = () => {
           ✌️
         </Button>
       </Row>
-      <Row>
-        {playerMove && compMove && (
-          <div className={styles.choice}>
-            <Emoji>{`You ${playerMove}`}</Emoji>
-            <Emoji>{`${compMove} Computer`}</Emoji>
+      {/* Conditional Rendering */}
+      {playerMove && compMove ? (
+        wins || losses || ties ? (
+          <div className={styles.wrapper}>
+            <div className={styles.choice}>
+              <Emoji>{`You ${playerMove}`}</Emoji>
+              <Emoji>{`${compMove} Computer`}</Emoji>
+            </div>
+            <Result>{result}</Result>
           </div>
-        )}
-      </Row>
-      <Result>{result}</Result>
+        ) : null
+      ) : null}
       <Row>
-        <Score>Wins:</Score>
-        <Score>Losses:</Score>
-        <Score>Ties:</Score>
+        <Score>Wins: {wins}</Score>
+        <Score>Losses: {losses}</Score>
+        <Score>Ties: {ties}</Score>
       </Row>
-      <Button variant="contained">Reset Score</Button>
+
+      <Button variant="contained" onClick={resetScore}>
+        Reset Score
+      </Button>
     </Page>
   );
 };
